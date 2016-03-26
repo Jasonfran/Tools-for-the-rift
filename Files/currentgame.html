@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html id="html" >
+	<head> 
+		<link rel="stylesheet" href="style.css" />
+		<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+		<title>Tools for the rift</title>
+		<script src="js/jquery-1.11.1.min.js"></script>
+		<script src="http://code.jquery.com/ui/1.11.0/jquery-ui.js"></script>
+		<style type="text/css">
+			#search{
+				display: none;
+				text-align: center;
+				position: relative;
+			}
+			#search div{
+				margin: auto;  
+				width: 20%;
+				height: auto;
+				position: absolute;
+				left:0;
+				right: 0;
+			}
+		</style>
+		<script>
+			
+			function dragMove(){
+				overwolf.windows.getCurrentWindow(function(result){
+					if (result.status=="success"){
+						overwolf.windows.dragMove(result.window.id);
+					}
+				});
+			};
+			
+			function closeWindow(){
+				overwolf.windows.getCurrentWindow(function(result){
+					if (result.status=="success"){
+						overwolf.windows.close(result.window.id);
+					}
+				});
+			};
+
+			function minimizeWindow(){
+				overwolf.windows.getCurrentWindow(function(result){
+					if (result.status=="success"){
+						overwolf.windows.minimize(result.window.id);
+					}
+				});
+			};
+
+			function getURLVar(val) {
+			    var result = "No summoner name or region",
+			        tmp = [];
+			    location.search
+			    .substr(1)
+			        .split("&")
+			        .forEach(function (item) {
+			        	tmp = item.split("=");
+			        	if (tmp[0] === val) result = decodeURIComponent(tmp[1]);
+			    	});
+			    return result;
+			}
+
+			function searchCurrentGame(){
+				var name = $("#summonerName").val();
+				var region = $("#summonerRegion").val();
+
+				if(name.length <= 16 && name.length > 0){
+					window.location.href = "currentgame.html?region="+region+"&summoner="+name;
+				}else if(name == null || name.trim() == ""){
+					$("#nameLengthAlert").html("Please enter a name into the box, and select the correct region for the account");
+					$("#nameLengthAlert").show();
+				}else{
+					$("#nameLengthAlert").html("The name is loner than 16 characters, please enter the correct name");
+					$("#nameLengthAlert").show();
+				}
+
+				
+			}
+
+			function handleJSON(data){
+				console.log(data);
+				if(data.success == "false"){
+					$("#contentTitle").html("No game found for "+getURLVar("summoner"));
+					$("#search").fadeIn();
+					$("#loadImg").hide();
+				}else{
+					$("#contentTitle").html(getURLVar('summoner')+"'s game");
+					$("#loadImg").hide();
+					$("#searchOther").fadeIn();
+					for(var name in data.teamOne){
+						//console.log(data.teamOne[name]);
+					    arr = data.teamOne[name].split(' '),
+					    result = arr.splice(0,2);
+						result.push(arr.join(' '));
+						version = data.version;
+						champ = result[2].replace(' ', '').replace("'", "").replace(".","");
+						spell1 = result[0];
+						spell2 = result[1];
+						console.log(result);
+						wins = data.summonerRanks[name].wins;
+						lp = data.summonerRanks[name].lp;
+
+						//Riots champ names on the API are SO inconsistant -_-
+						switch(champ){
+							case 'LeBlanc':
+								champ = 'Leblanc';
+								break;
+							case 'Wukong':
+								champ = 'MonkeyKing';
+								break;
+							case 'VelKoz':
+								champ = 'Velkoz';
+								break;
+							case 'KhaZix':
+								champ = 'Khazix';
+								break;
+						}
+
+						if(data.summonerRanks[name].league == " "){
+							levelOrLeague = "Level " + data.summonerRanks[name].level;
+						}else{
+							levelOrLeague = data.summonerRanks[name].league;
+						}
+
+						if(wins == null){
+							wins = "No";
+						}
+
+						if(lp == null){
+							lp = "No";
+						}
+
+						console.log(data.summonerRanks[name].league);
+
+						
+						$("#cgTable #blue").append('<td><span id="name">'+name+'</span><p></p><div id="wins">'+wins+'<br>Wins</div><div id="lp">'+lp+'<br>LP</div><div id="rank">'+levelOrLeague+'</div><img class="tooltip" src="http://ddragon.leagueoflegends.com/cdn/'+version+'/img/champion/'+champ+'.png" title="'+result[2]+'" width="64"><img id="spell1" src="images/spells/'+spell1+'.png" width="20px" height="20px"><img id="spell2" src="images/spells/'+spell2+'.png" width="20px" height="20px"></td>');
+						}
+
+					for(var name in data.teamTwo){
+						//console.log(data.teamTwo[name]);
+					    arr = data.teamTwo[name].split(' '),
+					    result = arr.splice(0,2);
+						result.push(arr.join(' '));
+						version = data.version;
+						champ = result[2].replace(' ', '').replace("'", "");
+						spell1 = result[0];
+						spell2 = result[1];
+						console.log(result);
+						wins = data.summonerRanks[name].wins;
+						lp = data.summonerRanks[name].lp;
+						switch(champ){
+							case 'LeBlanc':
+								champ = 'Leblanc';
+								break;
+							case 'Wukong':
+								champ = 'MonkeyKing';
+								break;
+							case 'VelKoz':
+								champ = 'Velkoz';
+								break;
+							case 'KhaZix':
+								champ = 'Khazix';
+								break;
+						}
+
+						if(data.summonerRanks[name].league == " "){
+							levelOrLeague = "Level " + data.summonerRanks[name].level;
+						}else{
+							levelOrLeague = data.summonerRanks[name].league;
+						}
+
+						if(wins == null){
+							wins = "No";
+						}
+
+						if(lp == null){
+							lp = "No";
+						}
+
+						
+						$("#cgTable #purple").append('<td><span id="name">'+name+'</span><p></p><div id="wins">'+wins+'<br>Wins</div><div id="lp">'+lp+'<br>LP</div><div id="rank">'+levelOrLeague+'</div><img class="tooltip" src="http://ddragon.leagueoflegends.com/cdn/'+version+'/img/champion/'+champ+'.png" alt="'+result[2]+'" width="64"><img id="spell1" src="images/spells/'+spell1+'.png" width="20px" height="20px"><img id="spell2" src="images/spells/'+spell2+'.png" width="20px" height="20px"></td>');
+					}
+				}
+			}
+
+			
+
+			var currentGameJSON = "http://jason-apicall.appspot.com/currentgame?region="+getURLVar('region')+"&summoner="+getURLVar('summoner');
+			function refreshWindow(){
+				location.reload();
+			};
+
+			function searchForOther(){
+				$("#cgTable").hide();
+				$("#contentTitle").html("Search for another summoner");
+				$("#search").show();
+				$("#searchOther").hide();
+			}
+
+			window.onload = function(){
+				$('#content').fadeIn();
+				$('#loadImg').show();
+				$.getJSON(currentGameJSON, function(data){
+					handleJSON(data);
+				});
+				$("#summonerRegion").val(localStorage.summonerRegion);
+			};
+
+
+		</script>
+	</head>
+
+	<body>
+		<div class="titleBar" id="titleBar" onmousedown="dragMove();">
+			Tools for the rift
+		</div>
+		<div id="closeButton" onclick="closeWindow();">&#10005</div>
+		<div id="minimizeButton" onclick="minimizeWindow();">_</div>
+		<div id="refreshButton" onclick="refreshWindow();">Refresh</div>
+		<!-- <div class="frame" id="frameTop" onmousedown=""></div> -->
+		<div class="frame" id="frameRight" ></div>
+		<div class="frame" id="frameBottomRight"></div>
+		<div class="frame" id="frameBottom"></div>
+		<div class="frame" id="frameBottomLeft"></div>
+		<div class="frame" id="frameLeft"></div>
+		
+		<div id="content" style="display: none;">
+			<h1 id="contentTitle" style="font-size: 34px;"></h1>
+			<img style="position: fixed; top: 50%; left: 45%; display: none; text-align: center;" src="images/loading.gif" id="loadImg">
+			<table id="cgTable">
+				<tr id="blue">
+				</tr>
+				<tr id="purple">
+				</tr>
+			</table>
+
+			<div id="search">
+				<p>That summoner is currently not in a game. Make sure the name and region is correct and try again. Or you can search for another summoner</p>
+				<p id="nameLengthAlert"></p>
+				<form action="javascript:searchCurrentGame();">
+				Summoner name: <input type="text" id="summonerName">
+				Region: <select id="summonerRegion">
+				    	<option value="BR">BR</option>
+				    	<option value="EUNE">EUNE</option>
+				    	<option value="EUW">EUW</option>
+				    	<option value="KR">KR</option>
+				    	<option value="LAN">LAN</option>
+				    	<option value="LAS">LAS</option>
+				    	<option value="NA">NA</option>
+				    	<option value="OCE">OCE</option>
+				    	<option value="RU">RU</option>
+				    	<option value="TR">TR</option>
+					</select>
+				</form>
+					<div class="standardButton" onclick="searchCurrentGame();">
+						Search
+					</div>
+			</div>
+		</div>
+		<div id="navFooter">
+			<a class="standardButton" href="index.html">Back</a>
+			<a id="searchOther" style="position: relative; float: right; display: none;" class="standardButton" onclick="searchForOther();">Search for a different summoner</a>
+		</div>
+	</body>
+</html>

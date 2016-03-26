@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html id="html" style="display: none;">
+	<head> 
+		<link rel="stylesheet" href="style.css" />
+		<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+		<title>Tools for the rift</title>
+		<script src="js/jquery-1.11.1.min.js"></script>
+		<script>
+
+			function dragMove(){
+				overwolf.windows.getCurrentWindow(function(result){
+					if (result.status=="success"){
+						overwolf.windows.dragMove(result.window.id);
+					}
+				});
+			};
+			
+			function closeWindow(){
+				overwolf.windows.getCurrentWindow(function(result){
+					if (result.status=="success"){
+						overwolf.windows.close(result.window.id, function(){
+							
+						});
+					}
+				});
+			};
+
+			function minimizeWindow(){
+				overwolf.windows.getCurrentWindow(function(result){
+					if (result.status=="success"){
+						overwolf.windows.minimize(result.window.id);
+					}
+				});
+			};
+
+
+			function refreshWindow(){
+				location.reload();
+			};
+
+			function openTeamspeakTools(){
+				overwolf.windows.obtainDeclaredWindow("TeamspeakTools", function(result){
+					if (result.status == "success"){
+						overwolf.windows.restore(result.window.id, function(result){
+								console.log(result);
+						});
+					}
+				});
+			};
+
+			function gotoMystats(){
+				window.location.href = "mystats.html";
+				localStorage.setItem("referrer", "mystats.html");
+			};
+
+			function checkForSummonerInfo(){
+				if(localStorage.summonerName == null || localStorage.summonerName == ""){
+					$("#requestInfo").fadeIn();
+					$("#backFade").show();
+					$("#content").css("-webkit-filter", "blur(2px)");
+				}else{
+					$("#summonerWelcome").html("Welcome " + localStorage.summonerName + " (" + localStorage.summonerRegion + ")");
+				}
+			};
+
+			function saveSummonerInfo(){
+				var name = $("#summonerName").val();
+				var region = $("#summonerRegion").val();
+
+				if(name.length <= 16 && name.length > 0){
+					localStorage.summonerName = name;
+					localStorage.summonerRegion = region;
+					$("#requestInfo").fadeOut();
+					$("#backFade").hide();
+					$("#content").css("-webkit-filter", "");
+					$("#summonerWelcome").html("Welcome " + localStorage.summonerName + " (" + localStorage.summonerRegion + ")");
+				}else if(name == null || name.trim() == ""){
+					$("#nameLengthAlert").html("Please enter a name into the box, and select the correct region for your account");
+					$("#nameLengthAlert").show();
+				}else{
+					$("#nameLengthAlert").html("You're name is loner than 16 characters, please enter the correct name");
+					$("#nameLengthAlert").show();
+				}
+
+				
+			}
+
+			function openSearchBox(){
+				$("#backFade").fadeIn()
+				$("#searchBox").fadeIn();
+				$("#content").css("-webkit-filter", "blur(2px)");
+			}
+
+			function closeSearch(){
+				$("#searchBox").fadeOut();
+				$("#backFade").fadeOut();
+				$("#content").css("-webkit-filter", "");
+			}
+
+			function searchForSummoner(){
+				var name = $("#searchSummonerName").val(),
+					region = $("#searchSummonerRegion").val();
+
+				if(name.length <= 16 && name.length > 0){
+					window.location.href = "summonersearch.html?region="+region+"&summoner="+name;
+				}else if(name == null || name.trim() == ""){
+					$("#searchLengthAlert").html("Please enter a name into the box, and select the correct region for the account");
+					$("#searchBox").css("height", "30%");
+					$("#searchLengthAlert").show();
+				}else{
+					$("#searchLengthAlert").html("Summoner name is loner than 16 characters, please enter the correct name");
+					$("#searchBox").css("height", "30%");
+					$("#searchLengthAlert").show();
+				}
+
+			}
+
+			function gotoCurrentGame(){
+				window.location.href = "currentgame.html?region="+localStorage.summonerRegion+"&summoner="+localStorage.summonerName;
+			}
+
+			function gotoAbout(){
+				window.location.href = "about.html";
+			}
+
+			window.onload = function(){
+
+				$("html").css('opacity', localStorage.opacity);
+				if(localStorage.referrer == ""){
+					$('#content').show();
+					$('#html').fadeIn();
+				}else{
+					$('#html').show();
+					$('#content').fadeIn();
+					localStorage.setItem("referrer", "");
+				}
+				$("#searchSummonerRegion").val(localStorage.summonerRegion);
+				checkForSummonerInfo();
+				
+				$.getJSON("http://jason-apicall.appspot.com/status", function(data){
+					console.log(data);
+					$("#serviceStatusMessage").html(data.message);
+				});
+
+				
+			};
+			
+			
+		</script>
+	</head>
+
+	<body>
+		<div id="background_image_index"></div>
+		<div class="titleBar" id="titleBar" onmousedown="dragMove();">
+			Tools for the rift
+		</div>
+		<div id="closeButton" onclick="closeWindow();">&#10005</div>
+		<div id="minimizeButton" onclick="minimizeWindow();">_</div>
+		<div id="refreshButton" onclick="refreshWindow();">Refresh</div>
+		<!-- <div class="frame" id="frameTop" onmousedown=""></div> -->
+		<div class="frame" id="frameRight" ></div>
+		<div class="frame" id="frameBottomRight"></div>
+		<div class="frame" id="frameBottom"></div>
+		<div class="frame" id="frameBottomLeft"></div>
+		<div class="frame" id="frameLeft"></div>
+		
+		<div id="content" style="display: none;">
+			<h1 id="contentTitle">Tools for the rift</h1>
+			<h3 id="summonerWelcome"></h3>
+
+			<table id="menuButtons">
+				<tr>
+					<td>
+						<div id="currentGame" class="fancyButton" onclick="gotoCurrentGame();" style="background: url('images/ryze_button.png');">
+							<div class="buttonRibbon">
+								<p>Current Game stats (defaults to your account)</p>
+							</div>
+						</div>
+					</td>
+
+					<td>
+						<div id="myStats" class="fancyButton" onclick="gotoMystats();" style="background: url('images/jinx_button.png');">
+							<div class="buttonRibbon">
+								<p>My stats</p>
+							</div>
+						</div>
+					</td>
+
+					<td>
+						<div id="search" class="fancyButton" onclick="openSearchBox();" style="background: url('images/lissandra_button.png');">
+							<div class="buttonRibbon">
+								<p>Search for a summoner</p>
+							</div>
+						</div>
+					</td>
+				</tr>
+
+				<tr>
+					<td>
+						<div id="teamspeakTools" class="fancyButton" onclick="" style="background: url('images/aatrox_button.png');">
+							<div class="buttonRibbon">
+								<p>Feature in development</p>
+							</div>
+						</div>
+					</td>
+
+					<td>
+						<div id="settings" class="fancyButton" onclick="openSettings();" style="background: url('images/braum_button.png');">
+							<div class="buttonRibbon">
+								<p>Settings</p>
+							</div>
+						</div>
+					</td>
+
+					<td>
+						<div id="about" class="fancyButton" onclick="gotoAbout();" style="background: url('images/lucian_button.png');">
+							<div class="buttonRibbon">
+								<p>About</p>
+							</div>
+						</div>
+					</td>
+				</tr>
+			</table>
+
+			<div id="statusMessageDiv">
+				<p id="serviceStatusMessage">Loading service status...</p>
+			</div>	
+
+			<div id="backFade" style="display: none;"></div>
+
+		</div>
+		<div id="requestInfo" style="display: none;">
+
+				<!-- REGIONS "br", "eune", "euw", "kr", "lan", "las", "na", "oce", "ru", "tr" -->
+				<form id="regionAndSummoner" action="javascript:saveSummonerInfo();">
+					<p>Hello, Welcome to Tools for the Rift</p>
+					<p>Please enter your summoner info so I won't have to ask you again (You can change it later)</p>
+					<p id="nameLengthAlert"></p>
+					Name: <input type="text" id="summonerName">
+					Region: <select id="summonerRegion">
+				    	<option value="BR">BR</option>
+				    	<option value="EUNE">EUNE</option>
+				    	<option value="EUW">EUW</option>
+				    	<option value="KR">KR</option>
+				    	<option value="LAN">LAN</option>
+				    	<option value="LAS">LAS</option>
+				    	<option value="NA">NA</option>
+				    	<option value="OCE">OCE</option>
+				    	<option value="RU">RU</option>
+				    	<option value="TR">TR</option>
+					</select>
+				</form>
+
+					<a class="standardButton" onclick="saveSummonerInfo();">Save info</a>
+			</div>
+
+			<div id="searchBox">
+				<form id="regionAndSummoner" action="javascript:searchForSummoner();">
+					<p>Enter the details for the summoner you wish to search for</p>
+					<p id="searchLengthAlert"></p>
+					Name: <input type="text" id="searchSummonerName">
+					Region: <select id="searchSummonerRegion">
+				    	<option value="BR">BR</option>
+				    	<option value="EUNE">EUNE</option>
+				    	<option value="EUW">EUW</option>
+				    	<option value="KR">KR</option>
+				    	<option value="LAN">LAN</option>
+				    	<option value="LAS">LAS</option>
+				    	<option value="NA">NA</option>
+				    	<option value="OCE">OCE</option>
+				    	<option value="RU">RU</option>
+				    	<option value="TR">TR</option>
+					</select>
+				</form>
+				<a class="standardButton" onclick="searchForSummoner();">Search</a>
+				<a class="standardButton" onclick="closeSearch();">Close</a>
+			</div>
+
+			<div id="settingsBox" style="display: none;">
+				<h3>Settings</h3>
+				<p>Your account info</p>
+				Name: <input type="text" id="settingsSummonerName">
+				Region: <select id="settingsSummonerRegion">
+			    	<option value="BR">BR</option>
+			    	<option value="EUNE">EUNE</option>
+			    	<option value="EUW">EUW</option>
+			    	<option value="KR">KR</option>
+			    	<option value="LAN">LAN</option>
+			    	<option value="LAS">LAS</option>
+			    	<option value="NA">NA</option>
+			    	<option value="OCE">OCE</option>
+			    	<option value="RU">RU</option>
+			    	<option value="TR">TR</option>
+				</select>
+				<p>Opacity</p>
+				<input type="range" id="opacity" min="50" max="100">
+				<div class="standardButton" id="save" onclick="saveSettings();">
+					Save settings
+				</div>
+			</div>
+	</body>
+
+	<script type="text/javascript">
+		function openSettings(){
+			$("#backFade").fadeIn();
+			$("#settingsBox").fadeIn()
+			$("#settingsBox #settingsSummonerName").val(localStorage.summonerName);
+			$("#settingsBox #settingsSummonerRegion").val(localStorage.summonerRegion);
+
+			$("#settingsBox #opacity").val($("html").css('opacity')*100);
+		}
+
+		function saveSettings(){
+			localStorage.summonerName = $("#settingsBox #settingsSummonerName").val();
+			localStorage.summonerRegion = $("#settingsBox #settingsSummonerRegion").val()
+			$("#summonerWelcome").html("Welcome " + localStorage.summonerName + " (" + localStorage.summonerRegion + ")");
+			localStorage.opacity = $("#settingsBox #opacity").val() / 100;
+			$("#backFade").fadeOut();
+			$("#settingsBox").fadeOut()
+		}
+
+		$("#settingsBox #opacity").on("change mousemove", function() {
+			$("html:not(#opacity)").css('opacity', $("#settingsBox #opacity").val() /100);
+			localStorage.opacity = $("#settingsBox #opacity").val() /100;
+		});
+	</script>
+</html>

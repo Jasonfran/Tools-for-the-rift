@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html id="html" >
+	<head> 
+		<link rel="stylesheet" href="style.css" />
+		<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+		<title>Tools for the rift</title>
+		<script src="js/jquery-1.11.1.min.js"></script>
+		<script>
+			
+			function dragMove(){
+				overwolf.windows.getCurrentWindow(function(result){
+					if (result.status=="success"){
+						overwolf.windows.dragMove(result.window.id);
+					}
+				});
+			};
+			
+			function closeWindow(){
+				overwolf.windows.getCurrentWindow(function(result){
+					if (result.status=="success"){
+						overwolf.windows.close(result.window.id);
+					}
+				});
+			};
+
+			function minimizeWindow(){
+				overwolf.windows.getCurrentWindow(function(result){
+					if (result.status=="success"){
+						overwolf.windows.minimize(result.window.id);
+					}
+				});
+			};
+
+
+			function refreshWindow(){
+				location.reload();
+			};
+
+			function getURLVar(val) {
+			    var result = "No summoner name or region",
+			        tmp = [];
+			    location.search
+			    .substr(1)
+			        .split("&")
+			        .forEach(function (item) {
+			        	tmp = item.split("=");
+			        	if (tmp[0] === val) result = decodeURIComponent(tmp[1]);
+			    	});
+			    return result;
+			}
+
+			function handleJSON(sumInfo){
+				$("#statsTable #level").html("<h4>Level</h4>"+sumInfo.basicStats.level);
+
+				//MAKE EVERYONES PROFILE ICONS SHOW UP
+
+				$("#statsTable #summonerName").html('<img id="profileIcon" src="http://ddragon.leagueoflegends.com/cdn/4.12.2/img/profileicon/'+sumInfo.basicStats.profileIcon+'.png""><h4>Summoner name</h4>'+sumInfo.basicStats.name);
+				$("#contentTitle").html(sumInfo.basicStats.name + "'s stats");
+				//console.log(sumInfo.rankedSummary.division);
+				if(sumInfo.rankedSummary.division != "Unranked"){
+					$("#statsTable #league").html("<h4>League</h4>"+sumInfo.rankedSummary.division);
+					$("#statsTable #leagueName").html("<h4>League name</h4>"+sumInfo.rankedSummary.leagueName);
+					$("#statsTable #leaguePoints").html("<h4>LP</h4>"+sumInfo.rankedSummary.LP);
+					$("#statsTable #rankedWins").html("<h4>Ranked wins</h4>"+sumInfo.rankedStats.wins);
+					$("#statsTable #rankedLosses").html("<h4>Ranked Losses</h4>"+sumInfo.rankedStats.losses);
+					$("#statsTable #rankedTotal").html("<h4>Ranked games</h4>"+sumInfo.rankedStats.totalGames);
+
+					delete sumInfo.rankedStats.wins;
+					delete sumInfo.rankedStats.losses;
+					delete sumInfo.rankedStats.totalGames;
+
+					for (var key in sumInfo.rankedStats) {
+						$("#extraStats table").append("\
+							<tr>\
+								<td>"+key+"</td>\
+								<td>"+sumInfo.rankedStats[key]+"\
+							</tr>");
+					};
+				}else{
+					$("#statsTable #league,#leagueName,#leaguePoints,#rankedWins,#rankedLosses,#rankedTotal, #extraStats").hide();
+					$("#unrankedMessage").fadeIn();
+				}
+			}
+
+			var summonerName = getURLVar("summoner");
+			var summonerRegion = getURLVar("region");
+			var JSONUrl = "http://jason-apicall.appspot.com?region="+summonerRegion+"&summoner="+escape(summonerName);
+			console.log(JSONUrl);
+
+
+			$(document).ready(function(){
+				$('#content').fadeIn();
+				try{
+					$.getJSON(JSONUrl, function(data){
+						console.log(data);
+						if(data.success == "false"){
+							$("#statsTable #league,#leagueName,#leaguePoints,#rankedWins,#rankedLosses,#rankedTotal, #extraStats, #level").hide();
+							$("#statsTable #summonerName").attr("colspan","3");
+							$("#statsTable #summonerName").html(data.error);
+						}else{
+							handleJSON(data);
+						}
+					});
+				}catch(e){
+					$("#statsTable #league,#leagueName,#leaguePoints,#rankedWins,#rankedLosses,#rankedTotal, #extraStats, #level").hide();
+							$("#statsTable #summonerName").attr("colspan","3");
+							$("#statsTable #summonerName").html("A unhandled error has occured. This is probably an error on the php server");
+				}
+			});
+
+		</script>
+	</head>
+
+	<body>
+		<div id="background_image"></div>
+		<div class="titleBar" id="titleBar" onmousedown="dragMove();">
+			Tools for the rift
+		</div>
+		<div id="closeButton" onclick="closeWindow();">&#10005</div>
+		<div id="minimizeButton" onclick="minimizeWindow();">_</div>
+		<div id="refreshButton" onclick="refreshWindow();">Refresh</div>
+		<!-- <div class="frame" id="frameTop" onmousedown=""></div> -->
+		<div class="frame" id="frameRight" ></div>
+		<div class="frame" id="frameBottomRight"></div>
+		<div class="frame" id="frameBottom"></div>
+		<div class="frame" id="frameBottomLeft"></div>
+		<div class="frame" id="frameLeft"></div>
+		
+		<div id="content" style="display: none;">
+			<h1 id="contentTitle"></h1>
+			<table id="statsTable">
+			  <tr>
+			  	<td id="level"><img src="images/loading.gif" width="32"></td>
+			    <th id="summonerName" colspan="2"><img src="images/loading.gif" width="32"></th>
+			  </tr>
+			  <tr>
+			    <td id="league"><img src="images/loading.gif" width="32"></td>
+			    <td id="leagueName"><img src="images/loading.gif" width="32"></td>
+			    <td id="leaguePoints"><img src="images/loading.gif" width="32"></td>
+			  </tr>
+			  <tr>
+			    <td id="rankedWins"><img src="images/loading.gif" width="32"></td>
+			    <td id="rankedLosses"><img src="images/loading.gif" width="32"></td>
+			    <td id="rankedTotal"><img src="images/loading.gif" width="32"></td>
+			  </tr>
+			  <tr id="unrankedMessage" style="display: none;">
+			  	<td colspan="3" style="height: 100%;">I currently only show ranked game information. This user has not completed their ranked promos. Unranked information will be here in the very near future!<br>
+			  	(If they are ranked then it might be an api error, just re open the stats page)</td>
+			  </tr>
+			</table>
+
+			<div id="extraStats">
+				<table>
+					<tr>
+						
+					</tr>
+
+				</table>
+			</div>
+
+		</div>
+		<div id="navFooter">
+				<a class="standardButton" href="index.html">Back</a>
+			</div>
+	</body>
+
+</html>

@@ -1,0 +1,596 @@
+﻿html {
+	overflow: hidden;
+	background: #1D1D1D;
+	border-top-right-radius: 10px;
+	border-top-left-radius: 10px;
+	font-family: Futura, "Trebuchet MS", Arial, sans-serif;
+	opacity: 1;
+
+}
+
+
+@font-face{
+	font-family: 'LoLfont';
+	src: url('fonts/LoL.ttf');
+}
+
+body{
+	-webkit-user-select: none;
+	cursor: default;
+	color: white;
+}
+
+.frame {
+	background: #0D0D0D;
+	/*border: 1px solid blue;*/
+	position: absolute;
+	z-index: 500;
+}
+
+.titleBar{
+	background: #0D0D0D;
+	position: absolute;
+	font-weight: bold;
+	border-top-right-radius: 10px;
+	border-top-left-radius: 10px;
+	}
+
+#titleBar{
+	top: 0px;
+	height: 25px;
+	left: 0px;
+	right: 0px;
+	text-align: center;
+	color: #ecf0f1;
+	
+}
+
+#closeButton{
+	position: absolute;
+	top: 0px;
+	right: 10px;
+	height: 25px;
+	width: 20px;
+	text-shadow: 1px 1px #0D0D0D;
+	color: grey;
+	text-align: center;
+	cursor: default;
+	transition: color 0.5s linear;
+	font-weight: bold;
+}
+
+#closeButton:hover{
+	transition: color 0.5s linear;
+	color: lightgrey;
+	
+}
+#closeButton:active{
+	top: 1px;
+	right: 9px;
+}
+
+#minimizeButton{
+	position: absolute;
+	top: 0px;
+	right: 30px;
+	height: 25px;
+	width: 20px;
+	text-shadow: 1px 1px #0D0D0D;
+	color: grey;
+	text-align: center;
+	cursor: default;
+	transition: color 0.5s linear;
+	font-weight: bold;
+}
+
+#minimizeButton:hover{
+	transition: color 0.5s linear;
+	color: lightgrey;
+	
+}
+#minimizeButton:active{
+	top: 1px;
+	right: 29px;
+}
+
+#refreshButton{
+	position: absolute;
+	top: 0px;
+	left: 10px;
+	height: 25px;
+	width: auto;
+	text-shadow: 1px 1px #0D0D0D;
+	color: grey;
+	text-align: center;
+	cursor: default;
+	transition: color 0.5s linear;
+	font-weight: bold;
+}
+
+#refreshButton:hover{
+	transition: color 0.5s linear;
+	color: lightgrey;
+	
+}
+#refreshButton:active{
+	top: 1px;
+	left: 9px;
+}
+
+#content {
+	position: absolute;
+	top: 25px;
+	bottom: 10px;
+	left: 10px;
+	right: 10px;
+	padding: 10px;
+	/*-webkit-filter: blur(2px);*/
+}
+
+
+#frameBottom {
+	height: 10px;
+	bottom: 0;
+	left: 10px;
+	right: 10px;
+}
+
+#frameLeft {
+	width: 10px;
+	left: 0;
+	top: 20px;
+	bottom: 10px;
+}
+
+#frameRight {
+	width: 10px;
+	right: 0;
+	top: 20px;
+	bottom: 10px;
+}
+
+
+#frameBottomLeft {
+	width: 10px;
+	height: 10px;
+	bottom: 0;
+	left: 0;
+}
+
+#frameBottomRight {
+	width: 10px;
+	height: 10px;
+	bottom: 0;
+	right: 0;
+}
+
+/*CONTENT STYLES DOWN HERE!*/
+
+.fancyButton{
+	width: 200px;
+	height: 100px;
+	transition: -webkit-transform 0.2s linear, -webkit-box-shadow 0.2s linear;
+	display:-webkit-box;
+    -webkit-box-pack:center;
+    -webkit-box-align:center;
+}
+
+.fancyButton:hover{
+	-webkit-transform: scale(1.05, 1.05);
+	transition: -webkit-transform 0.2s linear, -webkit-box-shadow 0.2s linear;
+	-webkit-box-shadow: 0px 10px 10px 0px rgba(50, 50, 50, 0.75);
+}
+
+.fancyButton:active{
+	-webkit-transform: scale(0.95, 0.95);
+	transition: -webkit-transform 0.2s linear;
+}
+
+.buttonRibbon{
+	background: rgba(13,13,13,0.5);
+	border-top: 1px solid #0D0D0D;
+	border-bottom: 1px solid #0D0D0D;
+	border-spacing: 10px;
+	width: 100%;
+}
+
+.buttonRibbon p{
+	text-align: center;
+}
+
+#menuButtons{
+	margin: 0 auto;
+}
+
+#contentTitle{
+	margin: 0;
+	padding: 0;
+	font-family: 'LoLfont';
+	text-align: center;
+	font-size: 50px;
+	font-weight: bold;
+	color: gold;
+	text-shadow: 3px 3px 2px #0D0D0D;
+	-webkit-text-stroke-width: 2px;
+    -webkit-text-stroke-color: brown;
+}
+
+#navFooter{
+	position: absolute;
+	z-index: 0;
+	padding-left: 10px;
+	padding-right: 10px;
+	padding-top: 5px;
+	padding-bottom: 0px;
+	margin: 0;
+	background: #0D0D0D;
+	width: 630px;
+	height: 45px;
+	bottom: 0px;
+	left: 0px;
+	text-align: center;
+}
+
+.standardButton{
+	text-decoration: none;
+	border: none;
+	color: black;
+	padding: 0;
+	margin: 0;
+	background: darkgrey;
+	font-weight: bold;
+	width: auto;
+	text-align: center;
+	padding: 5px;
+	padding-right: 10px;
+	padding-left: 10px;
+	border-radius: 5px;
+	display: block;
+	position: absolute;
+	cursor: default;
+}
+.standardButton:hover{
+	background: lightgrey;
+}
+
+.standardButton:active{
+	background: grey;
+}
+
+
+ #statusMessage{
+ 	display: none;
+ 	padding: 0;
+ 	margin: 0;
+ 	padding: 5px;
+ 	vertical-align: middle;
+ 	background: green;
+ 	font-weight: bold;
+ 	width: auto;
+ 	border-radius: 5px;
+ 	text-align: center;
+ }
+
+ #statsTable{
+ 	width: 100%;
+ 	text-align: center;
+ }
+
+#statsTable tr{
+	padding: 0px;
+	margin: 0;
+	height: 50px;
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(69,72,77,1)), color-stop(100%,rgba(0,0,0,1)));
+}
+#statsTable td, #statsTable th{
+	border-radius: 5px;
+	padding: 0px;
+	border: 1px solid lightgrey;
+	color: lightgrey;
+	width: 33%;
+}
+
+#rankedWins{
+	color: green !important;
+}
+
+#rankedLosses{
+	color: red !important;
+}
+
+#statsTable h4{
+	padding: 0;
+	margin: 0;
+	text-decoration: underline;
+}
+
+ #requestInfo{
+ 	position: absolute;
+ 	left: 15%;
+ 	top: 25%;
+ 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#1D1D1D), color-stop(100%,#0D0D0D));
+ 	width: 70%;
+ 	height: 37%;
+ 	text-align: center;
+ 	border-radius: 10px;
+ 	border: 3px solid grey;
+ 	padding: 5px;
+ 	margin: 0;
+ }
+
+input[type="text"]{
+ 	background: #1D1D1D;
+ 	border: 1px solid grey;
+ 	border-radius: 5px;
+ 	padding: 5px;
+ 	color: white;
+ }
+
+ select{
+ 	background: #1D1D1D;
+ 	border: 1px solid grey;
+ 	border-radius: 5px;
+ 	padding: 5px;
+ 	color: white;
+ }
+
+ #backFade{
+ 	position: absolute;
+ 	top: 0px;
+ 	left: 0px;
+ 	width: 100%;
+ 	height: 100%;
+ 	background: black;
+ 	opacity: 0.5;
+
+ }
+
+ #requestInfo a{
+ 	width: 70px;
+ 	text-align: center;
+ 	margin: 0 auto;
+ 	top: 10px;
+ 	position: relative;
+ }
+
+#requestInfo p{
+	padding: 0px;
+	margin: 0;
+}
+
+ #summonerWelcome{
+ 	text-align: center;
+ 	border: 2px solid black;
+ 	border-radius: 25px;
+ 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(125,126,125,1)), color-stop(100%,rgba(14,14,14,1)));
+ 	width: auto;
+ }
+
+ #nameLengthAlert{
+ 	display: none;
+ 	background: red;
+ 	color: white;
+ 	border-radius: 5px;
+ }
+
+#background_image{
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	top: 0px;
+	left: 0px;
+
+	background-image: url('http://ddragon.leagueoflegends.com/cdn/img/champion/splash/Katarina_4.jpg');
+	background-size: 650px 500px;
+	clip: rect(10px,650px,500px,0px);
+}
+
+#extraStats{
+	overflow: auto;
+	/*border: 1px solid lightgrey;*/
+	border-radius: 5px;
+	height: 175px;
+}
+
+#extraStats table{
+	width: 100%;
+}
+
+#extraStats td{
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(69,72,77,1)), color-stop(100%,rgba(0,0,0,1)));
+	border: 1px solid lightgrey;
+	border-radius: 5px;
+	padding: 5px;
+}
+
+#extraStats tr{
+}
+
+#extraStats::-webkit-scrollbar{
+	width: 10px;
+}
+
+#extraStats::-webkit-scrollbar-thumb{
+	background: grey;
+	-webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+	border-radius: 5px;
+	border: 1px solid black;
+}
+
+#searchBox{
+ 	position: absolute;
+ 	left: 15%;
+ 	top: 40%;
+ 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#1D1D1D), color-stop(100%,#0D0D0D));
+ 	width: 70%;
+ 	height: 20%;
+ 	text-align: center;
+ 	border-radius: 10px;
+ 	border: 3px solid grey;
+ 	padding: 5px;
+ 	margin: 0;
+ 	display: none;
+ }
+
+ #searchBox a{
+ 	width: 70px;
+ 	text-align: center;
+ 	margin: 0 auto;
+ 	top: 10px;
+ 	position: relative;
+ }
+
+#searchBox p{
+	padding: 0px;
+	margin: 0;
+}
+
+#searchBox a{
+	display: inline;
+}
+
+ #searchLengthAlert{
+ 	display: none;
+ 	background: red;
+ 	color: white;
+ 	border-radius: 5px;
+ }
+
+#profileIcon{
+	border-radius: 5px;
+	padding: 0;
+	margin: 0;
+	height: 50px;
+	float: left;
+	border: 1px solid grey;
+}
+#cgTable{
+	text-align: center;
+	width: 100%;
+	color: black;
+	padding: 5px;
+}
+#cgTable td #name{
+	padding: 1px;
+	text-align: center;
+	border: 1px solid black;
+	border-radius: 5px;
+	font-size: 11px;
+}
+
+#cgTable #blue td{
+	padding: 5px;
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(59,103,158,1)), color-stop(50%,rgba(43,136,217,1)), color-stop(51%,rgba(32,124,202,1)), color-stop(100%,rgba(125,185,232,1)));
+	border-radius: 10px;
+	border: 1px solid blue;
+}
+
+#cgTable #purple td{
+	padding: 5px;
+	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(203,96,179,1)), color-stop(50%,rgba(193,70,161,1)), color-stop(51%,rgba(168,0,119,1)), color-stop(100%,rgba(219,54,164,1)));
+	border-radius: 10px;
+	border: 1px solid blue;
+}
+
+#cgTable #wins{
+	width: 45%;
+	float: left;
+	background: green;
+	padding: 0;
+	border-radius: 3px;
+	border: 1px solid black;
+	font-size: 12px;
+}
+
+#cgTable #lp{
+	width: 45%;
+	float: right;
+	background: green;
+	padding: 0;
+	border-radius: 3px;
+	border: 1px solid black;
+	font-size: 12px;
+}
+
+#statusMessageDiv{
+	border: 1px solid grey;
+	border-radius: 5px;
+}
+
+#serviceStatusMessage{
+	text-align: center;
+}
+
+
+#settingsBox{
+	position: absolute;
+ 	left: 15%;
+ 	top: 20%;
+ 	background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#1D1D1D), color-stop(100%,#0D0D0D));
+ 	width: 70%;
+ 	height: 60%;
+ 	text-align: center;
+ 	border-radius: 10px;
+ 	border: 3px solid grey;
+ 	padding: 5px;
+ 	margin: 0;
+}
+
+#settingsBox h3{
+	margin: 0;
+	padding: 0px;
+
+}
+
+#settingsBox #save{
+	padding: 0;
+	margin: auto;  
+	width: 30%;
+	height: auto;
+	position: absolute;
+	left:0;
+	right: 0;
+}
+
+input[type=range] {
+    -webkit-appearance: none;
+    background-color: silver;
+    width: 200px;
+    height: 20px;
+    border-radius: 10px;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+     -webkit-appearance: none;
+    background-color: #666;
+    width: 10px;
+    height: 26px;
+}
+
+#settingsBox #opacity{
+	opacity: 1 !important;
+}
+
+#spell1{
+	position: relative;
+	top: 44px;
+	right: -1px;
+	float: left;
+}
+
+#teamspeakTools .buttonRibbon{
+	background: rgba(13,13,13,0.5);
+	border-top: 1px solid red;
+	border-bottom: 1px solid red;
+	border-spacing: 10px;
+	width: 100%;
+}
+#background_image_index{
+	position: fixed;
+	width: 100%;
+	height: 100%;
+	top: 10px;
+	left: 0px;
+
+	background-image: url('images/background.png');
+}

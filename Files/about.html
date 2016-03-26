@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html id="html" >
+	<head> 
+		<link rel="stylesheet" href="style.css" />
+		<meta content="text/html; charset=utf-8" http-equiv="Content-Type">
+		<title>Tools for the rift</title>
+		<style type="text/css">
+			a{
+				color: red;
+				cursor: pointer;
+			}
+
+			#content #disclaimer{
+				position: absolute;
+				bottom: 25px;
+			}
+		</style>
+		<script src="js/jquery-1.11.1.min.js"></script>
+		<script>
+			
+			function dragMove(){
+				overwolf.windows.getCurrentWindow(function(result){
+					if (result.status=="success"){
+						overwolf.windows.dragMove(result.window.id);
+					}
+				});
+			};
+			
+			function closeWindow(){
+				overwolf.windows.getCurrentWindow(function(result){
+					if (result.status=="success"){
+						overwolf.windows.close(result.window.id);
+					}
+				});
+			};
+
+			function minimizeWindow(){
+				overwolf.windows.getCurrentWindow(function(result){
+					if (result.status=="success"){
+						overwolf.windows.minimize(result.window.id);
+					}
+				});
+			};
+
+			function forumProfile(){
+				window.open("http://forums.overwolf.com/index.php?/user/5734-jasonfran/");
+			}
+
+			function refreshWindow(){
+				location.reload();			};
+
+			window.onload = function(){
+				$('#content').fadeIn();
+			};
+
+		</script>
+	</head>
+
+	<body>
+		<div class="titleBar" id="titleBar" onmousedown="dragMove();">
+			Tools for the rift
+		</div>
+		<div id="closeButton" onclick="closeWindow();">&#10005</div>
+		<div id="minimizeButton" onclick="minimizeWindow();">_</div>
+		<div id="refreshButton" onclick="refreshWindow();">Refresh</div>
+		<!-- <div class="frame" id="frameTop" onmousedown=""></div> -->
+		<div class="frame" id="frameRight" ></div>
+		<div class="frame" id="frameBottomRight"></div>
+		<div class="frame" id="frameBottom"></div>
+		<div class="frame" id="frameBottomLeft"></div>
+		<div class="frame" id="frameLeft"></div>
+		
+		<div id="content" style="display: none;">
+			<h1 id="contentTitle">About this app</h1>
+			
+			<div id="info">
+				<p>This app's main purpose is to help you find information about summoners in your game and information about summoners that are in your Teamspeak room. I will be constantly adding new features and more information, as well as visual upgrades.</p>
+				<p>If you have any suggestions or find an issue with the app you can message me on the Overwolf forums here: <a onclick="forumProfile();">Jasonfran</a></p>
+				<p>If you want you can add me on League of Legends on EUW. My summoner name is "I rule I win", lame I know.</p>
+			</div>
+			<p id="disclaimer">This product is not endorsed, certified or otherwise approved in any way by Riot Games, Inc. or any of its affiliates.</p>
+		</div>
+		<div id="navFooter">
+			<a class="standardButton" href="index.html">Back</a>
+		</div>
+	</body>
+</html>
